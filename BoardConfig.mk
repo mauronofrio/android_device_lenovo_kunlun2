@@ -119,6 +119,7 @@ TW_SCREEN_BLANK_ON_BOOT := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
 TARGET_USES_MKE2FS := true
+TW_HAS_EDL_MODE := true
 TW_EXCLUDE_TWRPAPP := true
 
 # Hack: prevent anti rollback
