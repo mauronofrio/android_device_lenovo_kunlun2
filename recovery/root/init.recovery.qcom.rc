@@ -35,12 +35,28 @@ on fs
     chown system system /dev/ion
     install_keyring
 
+on property:twrp.mount_to_decrypt=1
+    start odm_qseecomd
+
+on property:twrp.mount_to_decrypt=0
+    stop odm_qseecomd
+
+service odm_qseecomd /odm/bin/qseecomd
+    disabled
+    user root
+    group root
+    seclabel u:r:recovery:s0
+	
 on init
     mkdir /system/bin
     mkdir /system/etc
     symlink /system/etc /etc
     symlink /sbin/busybox /system/bin/sh
     symlink /vendor/manifest.xml /system/manifest.xml
+
+    # Workaround for setting AVB version
+    setprop ro.boot.avb_version 1.0
+    setprop ro.boot.vbmeta.avb_version ${ro.boot.avb_version}
 
     start hwservicemanager
     setprop crypto.ready 1
@@ -93,7 +109,6 @@ service keymaster-4-0 /sbin/android.hardware.keymaster@4.0-service-qti
 
 on boot
     setprop sys.usb.config adb
-    write /sys/class/power_supply/usb/otg_switch 1
 
 on property:crypto.ready=0
     stop sbinqseecomd
@@ -108,3 +123,9 @@ on property:vendor.sys.listeners.registered=true
     start keymaster-4-0
     start gatekeeper-1-0
     start servicemanager
+
+on property:ro.build.version.release_orig=*
+    setprop ro.build.version.release ${ro.build.version.release_orig}
+
+on property:ro.build.version.security_patch_orig=*
+    setprop ro.build.version.security_patch ${ro.build.version.security_patch_orig}
