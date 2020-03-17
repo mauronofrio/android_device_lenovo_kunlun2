@@ -6,3 +6,6 @@ ro.build.product=kunlun2
 ro.treble.enabled=true
 sys.usb.rndis.func.name=rndis_bam
 sys.usb.rmnet.func.name=rmnet_bam
+#
+ro.product.board=sdm710
+ro.board.platform=sdm710
